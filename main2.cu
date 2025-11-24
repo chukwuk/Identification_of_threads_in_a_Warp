@@ -111,9 +111,14 @@ main( int argc, char* argv[ ] )
   // checks for cuda errors  
   checkCudaErrors( status, "cudaMalloc( (void **)(&globalData3DDev), globalDataSize)");
    
-  threads.x = 4;
-  threads.y = 4; 
-  threads.z = 8; 
+  //threads.x = 4;
+  //threads.y = 4; 
+  //threads.z = 8; 
+  
+  
+  threads.x = 8;
+  threads.y = 8; 
+  threads.z = 2; 
 
   // copy data from host memory to the device:
   status = cudaMemcpy(globalData3DDev, globalData3D, globalDataSize, cudaMemcpyHostToDevice );
@@ -137,9 +142,9 @@ main( int argc, char* argv[ ] )
      
      	  
      printf("Time for execution: %llu clock cycle\n", threadProp3D[i].time ); 
-     fprintf (stderr, "threadid: %i \n", threadProp3D[i].thread_x);
-     fprintf (stderr, "threadid: %i \n", threadProp3D[i].thread_y);
-     fprintf (stderr, "threadid: %i \n", threadProp3D[i].thread_z);
+     fprintf (stderr, "threadid.x: %i \n", threadProp3D[i].thread_x);
+     fprintf (stderr, "threadid.y: %i \n", threadProp3D[i].thread_y);
+     fprintf (stderr, "threadid.z: %i \n", threadProp3D[i].thread_z);
 
   }	  
 

@@ -136,8 +136,8 @@ main( int argc, char* argv[ ] )
      
      	  
      printf("Time for execution: %llu clock cycle\n", threadProp2D[i].time ); 
-     fprintf (stderr, "threadid: %i \n", threadProp2D[i].thread_x);
-     fprintf (stderr, "threadid: %i \n", threadProp2D[i].thread_y);
+     fprintf (stderr, "threadid.x: %i \n", threadProp2D[i].thread_x);
+     fprintf (stderr, "threadid.y: %i \n", threadProp2D[i].thread_y);
 
   }	  
 

@@ -154,7 +154,7 @@ main( int argc, char* argv[ ] )
   for (int i = 0; i < BLOCKSIZE; i++) {
   	  
      printf("Time for execution: %llu clock cycle\n", threadProp[i].time ); 
-     printf ("threadid: %i \n", threadProp[i].thread_x);
+     printf ("threadid.x: %i \n", threadProp[i].thread_x);
 
   }	  
 
