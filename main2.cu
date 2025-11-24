@@ -10,7 +10,7 @@
 #include <thrust/functional.h>
 
 
-#include "threadsinWarp.h"
+#include "threadsinWarp3D.h"
 
 
 
@@ -56,105 +56,90 @@ main( int argc, char* argv[ ] )
   int NUMBLOCKS;
   int MINGRIDSIZE;  
   
-  
   cudaOccupancyMaxPotentialBlockSize( &MINGRIDSIZE, &BLOCKSIZE, 
-                                      threadsInWarp, 0, 0); 
+                                      threadsInWarp3D, 0, 0); 
    
   BLOCKSIZE = 128;
   NUMBLOCKS = (BLOCKSIZE+BLOCKSIZE-1)/BLOCKSIZE;
    
-  
-   
-  //threadProperties* threads = new threadProperties[BLOCKSIZE];
-  
-  threadProperties* threadProp; 
-  
-  int* globalData;
-  
-  cudaError_t status;
-  int threadPropertiesDataSize = (sizeof(threadProperties) * BLOCKSIZE);
-  int globalDataSize = (sizeof(int) * BLOCKSIZE);
-  fprintf (stderr, "Thread Properties Struct Size %i \n", threadPropertiesDataSize);
-  fprintf (stderr, "Global Data Size %i \n", globalDataSize);
-  
-  // pinned data
-  
-  cudaMallocHost((void**)&threadProp ,threadPropertiesDataSize);
-  
-  cudaMallocHost((void**)&globalData ,globalDataSize);
-
-  
-  
-  for (size_t i = 0; i < BLOCKSIZE; i++) {
-      globalData[i] = (rand() % 1000) + 1;
-  } 
-
-
-  
-  // Create CUDA events
-  cudaEvent_t start, stop;
-  cudaEventCreate(&start);
-  cudaEventCreate(&stop);
-
-  
     
-  threadProperties* threadPropDev; 
-  int* globalDataDev;
-
-  //allocate memory on the GPU device
-  status = cudaMalloc( (void **)(&threadPropDev), threadPropertiesDataSize);
-  // checks for cuda errors  
-  checkCudaErrors( status, "cudaMalloc( (void **)(&threadsDev), threadPropertiesDataSize)");
- 
-  
-
-  //allocate memory on the GPU device
-  status = cudaMalloc( (void **)(&globalDataDev), globalDataSize);
-  // checks for cuda errors  
-  checkCudaErrors( status, "cudaMalloc( (void **)(&globalDataDev), globalDataSize)");
-   
-     
-     
   // allocate number of threads in a block  
   dim3 threads(BLOCKSIZE, 1, 1 );
 
   // allocate number of blocks
   dim3 grid(NUMBLOCKS, 1, 1 );
   
+   
+  cudaError_t status;
+  int threadPropertiesDataSize = (sizeof(threadProperties) * BLOCKSIZE);
+  int globalDataSize = (sizeof(int) * BLOCKSIZE);
+  fprintf (stderr, "Thread Properties Struct Size %i \n", threadPropertiesDataSize);
+  fprintf (stderr, "Global Data Size %i \n", globalDataSize);
+  
+
+  // testing for 2D
+
+  threadProperties* threadProp3D; 
+  
+  int* globalData3D;
   
   
+  // pinned data
   
-  // Record the start event
-  cudaEventRecord(start, 0); 
+  cudaMallocHost((void**)&threadProp3D ,threadPropertiesDataSize);
+  
+  cudaMallocHost((void**)&globalData3D ,globalDataSize);
+
+  
+  
+  for (size_t i = 0; i < BLOCKSIZE; i++) {
+      globalData3D[i] = (rand() % 1000) + 1;
+  } 
+  
+
+  threadProperties* threadProp3DDev; 
+  int* globalData3DDev;
+
+  //allocate memory on the GPU device
+  status = cudaMalloc( (void **)(&threadProp3DDev), threadPropertiesDataSize);
+  // checks for cuda errors  
+  checkCudaErrors( status, "cudaMalloc( (void **)(&threadProp3DDev), threadPropertiesDataSize)");
+    
+
+  //allocate memory on the GPU device
+  status = cudaMalloc( (void **)(&globalData3DDev), globalDataSize);
+  // checks for cuda errors  
+  checkCudaErrors( status, "cudaMalloc( (void **)(&globalData3DDev), globalDataSize)");
+   
+  threads.x = 4;
+  threads.y = 4; 
+  threads.z = 8; 
 
   // copy data from host memory to the device:
-  status = cudaMemcpy(globalDataDev, globalData, globalDataSize, cudaMemcpyHostToDevice );
+  status = cudaMemcpy(globalData3DDev, globalData3D, globalDataSize, cudaMemcpyHostToDevice );
   // checks for cuda errors
   checkCudaErrors( status,"cudaMemcpy(globalDataDev, globalData, globalDataSize, cudaMemcpyHostToDevice );");  
 
+
   // kernel launch 
-  threadsInWarp<<< grid, threads >>>(threadPropDev, globalData);
+  threadsInWarp3D<<< grid, threads >>>(threadProp3DDev, globalData3D);
   status = cudaGetLastError(); 
   // check for cuda errors
   checkCudaErrors( status,"threadsInWarp<<< grid, threads >>>( threadsDev, globalData); ");
 
   // copy data from device memory to host 
-  status = cudaMemcpy(threadProp, threadPropDev, threadPropertiesDataSize, cudaMemcpyDeviceToHost);  
+  status = cudaMemcpy(threadProp3D, threadProp3DDev, threadPropertiesDataSize, cudaMemcpyDeviceToHost);  
   // checks for cuda errors
-  checkCudaErrors( status, " cudaMemcpy(threads, threadsDev, threadsPropertiesDataSize, cudaMemcpyDeviceToHost) "); 
+  checkCudaErrors( status, " cudaMemcpy(threadProp3D, threadsProp3DDev, threadsPropertiesDataSize, cudaMemcpyDeviceToHost) "); 
   
-  // Record the stop event
-  cudaEventRecord(stop, 0);
-  cudaEventSynchronize(stop); 
-  
-  // Calculate elapsed time
-  float GpuTime = 0;
-  cudaEventElapsedTime(&GpuTime, start, stop); 
   
   for (int i = 0; i < BLOCKSIZE; i++) {
-  	  
-     printf("Time for execution: %llu clock cycle\n", threadProp[i].time ); 
-     printf ("threadid: %i \n", threadProp[i].thread_x);
+     
+     	  
+     printf("Time for execution: %llu clock cycle\n", threadProp3D[i].time ); 
+     fprintf (stderr, "threadid: %i \n", threadProp3D[i].thread_x);
+     fprintf (stderr, "threadid: %i \n", threadProp3D[i].thread_y);
+     fprintf (stderr, "threadid: %i \n", threadProp3D[i].thread_z);
 
   }	  
 

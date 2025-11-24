@@ -10,14 +10,8 @@
 #include <thrust/functional.h>
 
 
-#include "threadsinWarp.h"
+#include "threadsinWarp2D.h"
 
-
-#ifndef NUMDATA
-
- #define NUMDATA 3000000000
-
-#endif
 
 #define IDX2C(i,j,ld) (((i)*(ld))+(j))
 
