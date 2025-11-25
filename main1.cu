@@ -134,10 +134,11 @@ main( int argc, char* argv[ ] )
   
   for (int i = 0; i < BLOCKSIZE; i++) {
      
-     	  
-     printf("Time for execution: %llu clock cycle\n", threadProp2D[i].time ); 
-     fprintf (stderr, "threadid.x: %i \n", threadProp2D[i].thread_x);
-     fprintf (stderr, "threadid.y: %i \n", threadProp2D[i].thread_y);
+          	  
+     printf("(threadId.x: %i, threadId.y: %i) execution time for copying data from GMEM to SMEM: %llu clock cycle\n", threadProp2D[i].thread_x, threadProp2D[i].thread_y,threadProp2D[i].time ); 
+     //printf("Time for execution: %llu clock cycle\n", threadProp2D[i].time ); 
+     //fprintf (stderr, "threadid.x: %i \n", threadProp2D[i].thread_x);
+     //fprintf (stderr, "threadid.y: %i \n", threadProp2D[i].thread_y);
 
   }	  
 

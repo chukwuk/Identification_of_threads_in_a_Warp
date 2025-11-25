@@ -153,8 +153,8 @@ main( int argc, char* argv[ ] )
   
   for (int i = 0; i < BLOCKSIZE; i++) {
   	  
-     printf("Time for execution: %llu clock cycle\n", threadProp[i].time ); 
-     printf ("threadid.x: %i \n", threadProp[i].thread_x);
+     printf("(threadId.x: %i) execution time for copying data from GMEM to SMEM: %llu clock cycle\n", threadProp[i].thread_x, threadProp[i].time ); 
+     //printf ("threadid.x: %i \n", threadProp[i].thread_x);
 
   }	  
 
