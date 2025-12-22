@@ -16,7 +16,7 @@ __global__  void threadsInWarp3D(threadProperties* threadsDev, int* globalData) 
    //size_t gid =  blockIdx.x * (blockDim.x * blockDim.y * blockDim.z) + (threadIdx.z * blockDim.y * blockDim.x) + (threadIdx.x * blockDim.y) + threadIdx.y;
 
 
-   float copyvalue; 
+   int copyvalue; 
    unsigned long long startTime = clock64();  
    readtimer[gid] = globalData[gid];
     

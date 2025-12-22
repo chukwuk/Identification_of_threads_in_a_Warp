@@ -12,7 +12,7 @@ __global__  void threadsInWarp(threadProperties* threadsDev, int* globalData) {
    __shared__ int readtimer [128];
    size_t gid = blockIdx.x *  blockDim.x +  threadIdx.x;
    
-   float copyvalue; 
+   int copyvalue; 
    unsigned long long int startTime = clock64();  
    readtimer[threadIdx.x] = globalData[threadIdx.x];
     

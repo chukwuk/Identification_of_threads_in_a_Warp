@@ -14,7 +14,7 @@ __global__  void threadsInWarp2D(threadProperties* threadsDev, int* globalData) 
  
 
 
-   float copyvalue; 
+   int copyvalue; 
    unsigned long long startTime = clock64();  
    readtimer[gid] = globalData[gid];
     
