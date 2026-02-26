@@ -1,1 +1,1 @@
-**Using GPU microbenchmarking to identify how threads are grouped in a Warp CUDA**
+**Application of GPU microbenchmarking in identification of how CUDA threads are grouped in a Warp**
